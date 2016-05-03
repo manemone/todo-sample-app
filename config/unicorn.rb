@@ -2,8 +2,9 @@ worker_processes Integer(ENV["WEB_CONCURRENCY"] || 3)
 timeout 15
 preload_app true
 
+app_dir = File.expand_path("../..", __FILE__)
+pid "#{app_dir}/tmp/pids/unicorn.pid"
 listen "/tmp/unicorn.sock"
-pid "/tmp/unicorn.pid"
 
 before_fork do |server, worker|
   Signal.trap 'TERM' do
