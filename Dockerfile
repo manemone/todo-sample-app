@@ -31,4 +31,4 @@ WORKDIR $APP_HOME
 RUN RAILS_ENV=production bundle exec rake assets:precompile --trace
 
 # Start up foreman
-CMD ["foreman", "start"]
+CMD ["bin/start_server.sh"]
