@@ -4,7 +4,7 @@ preload_app true
 
 app_dir = File.expand_path("../..", __FILE__)
 pid "#{app_dir}/tmp/pids/unicorn.pid"
-listen "/tmp/unicorn.sock"
+listen "#{app_dir}/tmp/sockets/unicorn.sock"
 
 before_fork do |server, worker|
   Signal.trap 'TERM' do
@@ -25,6 +25,5 @@ after_fork do |server, worker|
     ActiveRecord::Base.establish_connection
 end
 
-# ログの出力
 stderr_path File.expand_path('log/unicorn.log', ENV['RAILS_ROOT'])
 stdout_path File.expand_path('log/unicorn.log', ENV['RAILS_ROOT'])

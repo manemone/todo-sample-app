@@ -1,0 +1,18 @@
+nginx:
+  build: containers/nginx
+  ports:
+    - '80:80'
+  volumes_from:
+    - datastore
+  links:
+    - rails
+
+datastore:
+  build: containers/datastore
+
+rails:
+  build: .
+  env_file:
+    - ./.env
+  volumes_from:
+    - datastore

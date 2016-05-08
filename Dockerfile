@@ -4,7 +4,7 @@ FROM ruby:2.3.0
 
 # Update and install stuff your app needs to run
 RUN apt-get update -qq
-RUN apt-get install -y build-essential curl git imagemagick libmagickwand-dev libcurl4-openssl-dev nodejs postgresql-client
+RUN apt-get install -y build-essential curl git imagemagick libmagickwand-dev libcurl4-openssl-dev nodejs postgresql-client rsync
 
 # update bundler to avoid this issue on running foreman: https://github.com/bundler/bundler/issues/4381
 RUN gem update bundler
@@ -18,17 +18,11 @@ ADD Gemfile Gemfile
 ADD Gemfile.lock Gemfile.lock
 RUN bundle install
 
-# Install and configure nginx
-RUN apt-get install -y nginx
-RUN rm -rf /etc/nginx/sites-available/default
-ADD container/nginx.conf /etc/nginx/nginx.conf
-
 # Add our source files precompile assets
-ENV APP_HOME /var/app/todo-sample-app
+ENV APP_HOME /var/app
 RUN mkdir -p $APP_HOME
 ADD . $APP_HOME
 WORKDIR $APP_HOME
 RUN RAILS_ENV=production bundle exec rake assets:precompile --trace
 
-# Start up foreman
 CMD ["bin/start_server.sh"]
